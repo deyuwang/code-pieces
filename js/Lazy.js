@@ -3,39 +3,40 @@ function Lazy(arr){
 	var self = this;
 
 	var funcs = [];
+	var types = [];
 	
 	this.map = function(f){
-		f.type = 'map';
+		types.push('map');
 		funcs.push(f);
 		return self;
 	};
 
 	this.filter = function(f){
-		f.type = 'filter';
+		types.push('filter');
 		funcs.push(f);
 		return self;		
 	};
 
 	this.take = function(n){
 		var rs = [];
-		var forEnd = n;
+		var len = n;
 
 		if(n == null || n > arr.length){
-			forEnd = arr.length;
+			len = arr.length;
 		}
 
-		for(var i=0; i<forEnd; i++){
+		for(var i=0; i<len; i++){
 			var item = arr[i];
 
 			var skip = false;
 			
 			for(var j=0; j<funcs.length; j++){
-				var f = funcs[j];
-				var type = f.type;
+				var fn = funcs[j];
+				var type = types[j];
 				
 				if(type == 'map'){
-					item = f(item);
-				}else if(type == 'filter' && f(item) == false){
+					item = fn(item);
+				}else if(type == 'filter' && fn(item) == false){
 					skip = true;
 					break;
 				}
@@ -58,6 +59,8 @@ function Lazy(arr){
 	return this;
 }
 
+
+// --------------------- test --------------------------------
 function inc(n){
 	return n + 1;
 }
@@ -69,4 +72,3 @@ function isOdd(n){
 Lazy([1, 2, 3, 4, 5]).map(inc).take(3); // [ 2 3 4]
 Lazy([1, 2, 3, 4, 5]).filter(isOdd).take(); // [1 3 5]
 Lazy([1, 2, 3, 4, 5]).map(inc).filter(isOdd).take(); // [3 5]
-
