@@ -69,6 +69,16 @@ function isOdd(n){
 	return n % 2 != 0;
 }
 
-Lazy([1, 2, 3, 4, 5]).map(inc).take(3); // [ 2 3 4]
-Lazy([1, 2, 3, 4, 5]).filter(isOdd).take(); // [1 3 5]
-Lazy([1, 2, 3, 4, 5]).map(inc).filter(isOdd).take(); // [3 5]
+function str(n){
+	return "" + n;
+}
+
+var data = [1, 2, 3, 4, 5];
+
+Lazy(data).map(inc).take(3); // [2 3 4]
+
+Lazy(data).filter(isOdd).take(); // [1 3 5]
+
+Lazy(data).map(inc).filter(isOdd).take(); // [3 5]
+
+Lazy(data).map(inc).filter(isOdd).map(str).take(); // ["3" "5"]
